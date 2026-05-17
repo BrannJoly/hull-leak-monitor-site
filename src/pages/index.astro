@@ -68,37 +68,29 @@ const heroImage = `${base}images/hull-leak-monitor-hero.jpeg`;
             <p class="text-sm font-semibold text-copper">Peace of mind, without remembering to use the tester.</p>
             <h3 class="mt-3 text-xl font-semibold text-ink">Automatic periodic scanning</h3>
             <p class="mt-3 leading-7 text-ink/68">
-              In monitoring mode, the device wakes at the configured interval, such as every hour, scans all eight conductors, stores the readings, updates status LEDs, and raises an alert by email, buzzer, or external relay if needed.
+          Install the device and forget about it.</br>
+            In monitoring mode, the device wakes at the configured interval, such as every hour, scans all battery banks for leaks, stores the readings, updates status LEDs, and if necessary raises an alert by email, sounds a buzzer, or activate an external relay if configured.
             </p>
           </article>
           <article class="rounded-lg border border-ink/10 bg-mist p-6">
             <p class="text-sm font-semibold text-copper">Actual trends, no more wondering when it started.</p>
             <h3 class="mt-3 text-xl font-semibold text-ink">History instead of one-off checks</h3>
             <p class="mt-3 leading-7 text-ink/68">
-              Traditional indicators show the present condition. Logged trends help owners see whether a conductor is stable, slowly changing, or moving during charging, shore-power use, or wet equipment cycles.
+              Traditional indicators show the present condition. Logged trends help owners see whether a conductor is stable, slowly changing, or moving during solar panel operation, shore-power use, or heavy rain.
             </p>
           </article>
           <article class="rounded-lg border border-ink/10 bg-mist p-6">
-            <p class="text-sm font-semibold text-copper">Actual milliamps and sound feedback while you work.</p>
+            <p class="text-sm font-semibold text-copper">Actual Ohm values and sound feedback while you work.</p>
             <h3 class="mt-3 text-xl font-semibold text-ink">Continuous troubleshooting mode</h3>
             <p class="mt-3 leading-7 text-ink/68">
-              Select one wire and watch the live value so smaller leaks are not hidden behind bigger ones. Higher and lower beeps tell you what changed while you are working deep in the hull, without calling someone back to the panel.
+              Select one battery terminal and watch the live value change as you work. Fixing one leak in presence of another has a noticeable effect, contrary to pure LED-based monitors.<br/>
+              Higher and lower beeps keep you aware of changes while you are working deep in the hull, without calling the wife to give you readings back to the panel.
             </p>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="bg-panel-black py-16 text-white sm:py-20">
-      <div class="section-shell">
-        <div class="rounded-lg border border-white/12 bg-white/[0.04] p-5 sm:p-6">
-          <p class="text-sm font-semibold uppercase tracking-[0.18em] text-warning">Important note</p>
-          <p class="mt-3 leading-7 text-white/68">
-            Hull Leak Monitor is a monitoring tool and diagnostic aid for aluminium and steel boats. It supports troubleshooting, but it is not a replacement for a qualified marine electrician.
-          </p>
-        </div>
-      </div>
-    </section>
 
     <section id="specs" class="bg-mist py-16 sm:py-20">
       <div class="section-shell">
@@ -117,16 +109,23 @@ const heroImage = `${base}images/hull-leak-monitor-hero.jpeg`;
             <span class="font-semibold text-ink">Battery monitoring:</span> up to 4 battery banks, positive and negative, for 8 monitored wires.
           </li>
           <li class="rounded-lg border border-ink/10 bg-white p-4 leading-7 text-ink/72 shadow-lift">
-            <span class="font-semibold text-ink">Automated scans:</span> periodic scan interval is adjustable.
+            <span class="font-semibold text-ink">Automated scans:</span> periodic scan interval is adjustable (between one hour and off).
           </li>
           <li class="rounded-lg border border-ink/10 bg-white p-4 leading-7 text-ink/72 shadow-lift">
-            <span class="font-semibold text-ink">Alerts:</span> sound alerts with sound off switch, email alerts if Wi-Fi is set up, and external relay output.
+            <span class="font-semibold text-ink">Alerts:</span> sound alerts (with sound off switch), email alerts if Wi-Fi is set up, and external relay output.
           </li>
           <li class="rounded-lg border border-ink/10 bg-white p-4 leading-7 text-ink/72 shadow-lift">
             <span class="font-semibold text-ink">Controls:</span> LCD plus joystick for configuration and readings.
           </li>
           <li class="rounded-lg border border-ink/10 bg-white p-4 leading-7 text-ink/72 shadow-lift">
             <span class="font-semibold text-ink">Status LEDs:</span> basic operation, power, and alert indication.
+          </li>
+             <li class="rounded-lg border border-ink/10 bg-white p-4 leading-7 text-ink/72 shadow-lift">
+            <span class="font-semibold text-ink">Wifi:</span> Can either connect to the boat's network, or act as a hotspot to which you can connect
+          </li>
+           </li>
+             <li class="rounded-lg border border-ink/10 bg-white p-4 leading-7 text-ink/72 shadow-lift">
+            <span class="font-semibold text-ink">Web Portal:</span> Visualize your data or download it as a .csv text file
           </li>
         </ul>
       </div>
@@ -147,6 +146,17 @@ const heroImage = `${base}images/hull-leak-monitor-hero.jpeg`;
         <WaitlistForm />
       </div>
     </section>
+        <section class="bg-panel-black py-16 text-white sm:py-20">
+      <div class="section-shell">
+        <div class="rounded-lg border border-white/12 bg-white/[0.04] p-5 sm:p-6">
+          <p class="text-sm font-semibold uppercase tracking-[0.18em] text-warning">Important note</p>
+          <p class="mt-3 leading-7 text-white/68">
+            Hull Leak Monitor is a monitoring tool and diagnostic aid for aluminium and steel boats. It supports troubleshooting, but it is not a replacement for a qualified marine electrician.
+          </p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <Footer />
