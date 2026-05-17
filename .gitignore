@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+/WhatsApp Image*.jpeg
+/signal-*.png
+/signal-*.jpeg

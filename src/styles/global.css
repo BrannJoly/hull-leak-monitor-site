@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    font-feature-settings: "ss01" on, "cv01" on;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: #f4f7f5;
+    color: #141414;
+    font-family:
+      Inter,
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+
+  ::selection {
+    background: #d8eadb;
+    color: #141414;
+  }
+
+  :focus-visible {
+    outline: 3px solid #36b05f;
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .section-shell {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-copper;
+  }
+
+  .hero-product {
+    filter: drop-shadow(0 34px 48px rgba(20, 20, 20, 0.28));
+  }
+
+  .instrument-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+}

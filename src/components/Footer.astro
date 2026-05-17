@@ -1,0 +1,14 @@
+---
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const withBase = (path = "") => `${base}${path.replace(/^\//, "")}`;
+---
+
+<footer class="border-t border-ink/10 bg-white">
+  <div class="section-shell flex flex-col gap-5 py-8 text-sm text-ink/62 md:flex-row md:items-center md:justify-between">
+    <p>&copy; {new Date().getFullYear()} Hull Leak Monitor.</p>
+    <nav class="flex flex-wrap gap-5" aria-label="Footer navigation">
+      <a class="font-medium text-ink/72 transition hover:text-ink" href={withBase()}>Home</a>
+      <a class="font-medium text-ink/72 transition hover:text-ink" href={withBase("privacy/")}>Privacy</a>
+    </nav>
+  </div>
+</footer>

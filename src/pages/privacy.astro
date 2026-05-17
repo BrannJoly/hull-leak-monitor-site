@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../components/BaseLayout.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+
+<BaseLayout title="Privacy | Hull Leak Monitor" description="Privacy information for the Hull Leak Monitor waitlist website.">
+  <Header />
+
+  <main class="bg-white">
+    <section class="section-shell max-w-4xl py-16 sm:py-20">
+      <p class="eyebrow">Privacy</p>
+      <h1 class="mt-4 text-4xl font-semibold leading-tight text-ink sm:text-5xl">
+        Privacy for a static waitlist site
+      </h1>
+      <div class="mt-8 space-y-7 text-base leading-8 text-ink/70">
+        <p>
+          The Hull Leak Monitor waitlist website has no backend, no local database, and no local email storage.
+        </p>
+        <p>
+          Waitlist submissions are sent directly to the configured external provider, Brevo. That provider processes the information you submit according to the settings and privacy terms configured in that account.
+        </p>
+        <p>
+          The waitlist form asks for your email address and optional context about your boat so Hull Leak Monitor can send relevant updates. Do not submit sensitive vessel, financial, or safety-critical information through the form.
+        </p>
+        <p>
+          This site does not include analytics, advertising pixels, or client-side tracking scripts. GitHub Pages or the external form provider may process routine technical logs needed to serve the website or handle submissions.
+        </p>
+      </div>
+
+      <a
+        class="mt-10 inline-flex min-h-12 items-center justify-center rounded-md bg-ink px-5 text-base font-semibold text-white transition hover:bg-panel-black"
+        href={`${base}#waitlist`}
+      >
+        Back to waitlist
+      </a>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

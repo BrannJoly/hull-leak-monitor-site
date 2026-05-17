@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../components/BaseLayout.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+
+<BaseLayout title="Thanks | Hull Leak Monitor" description="Thank you page for the Hull Leak Monitor waitlist.">
+  <Header />
+
+  <main class="bg-mist">
+    <section class="section-shell grid min-h-[calc(82svh-4rem)] place-items-center py-16 text-center">
+      <div class="max-w-2xl">
+        <p class="eyebrow">You're on the list</p>
+        <h1 class="mt-4 text-4xl font-semibold leading-tight text-ink sm:text-6xl">
+          Thanks for joining the Hull Leak Monitor waitlist.
+        </h1>
+        <p class="mt-6 text-lg leading-8 text-ink/68">
+          You'll get product updates and availability news by email.
+        </p>
+        <a
+          class="mt-8 inline-flex min-h-12 items-center justify-center rounded-md bg-ink px-5 text-base font-semibold text-white transition hover:bg-panel-black"
+          href={base}
+        >
+          Return home
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
