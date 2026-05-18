@@ -1,24 +1,331 @@
-<iframe
-  class="brevo-waitlist-frame"
-  title="Hull Leak Monitor waitlist form"
-  src="https://c7c6378c.sibforms.com/serve/MUIFACD-HlS2DfxGUEmfj3H4-iximMSTcykMwYyo86bE5vukwm79ZorM-gSH93nQPr-7AOOYo-sQFeaGmZk6T1VvgiZMbti4Airg_-YV1zl38CVeCKw8SnRXKm-sCJSFJ19h7TQD03Biuludua3OFrDUXD285f-aauAbV-2IkudSavW4N43XZPM5xBbEEDRLgjh8ZjY4pDiWESl8bg=="
-  height="940"
-></iframe>
+---
+const brevoAction =
+  "https://c7c6378c.sibforms.com/serve/MUIFACD-HlS2DfxGUEmfj3H4-iximMSTcykMwYyo86bE5vukwm79ZorM-gSH93nQPr-7AOOYo-sQFeaGmZk6T1VvgiZMbti4Airg_-YV1zl38CVeCKw8SnRXKm-sCJSFJ19h7TQD03Biuludua3OFrDUXD285f-aauAbV-2IkudSavW4N43XZPM5xBbEEDRLgjh8ZjY4pDiWESl8bg==";
+---
+
+<div class="brevo-embed">
+  <div id="sib-form-container" class="sib-form-container">
+    <div id="error-message" class="sib-form-message-panel brevo-message brevo-message-error" role="alert">
+      <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
+        <span class="sib-form-message-panel__inner-text">
+          Your subscription could not be saved. Please try again.
+        </span>
+      </div>
+    </div>
+
+    <div id="success-message" class="sib-form-message-panel brevo-message brevo-message-success" role="status">
+      <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
+        <span class="sib-form-message-panel__inner-text">
+          Success, you are on the waitlist.
+        </span>
+      </div>
+    </div>
+
+    <div id="sib-container" class="sib-container--large sib-container--vertical brevo-card">
+      <form id="sib-form" method="POST" action={brevoAction} data-type="subscription">
+        <div class="sib-input sib-form-block">
+          <div class="form__entry entry_block">
+            <div class="form__label-row">
+              <label class="entry__label" for="EMAIL" data-required="*">
+                Email address
+              </label>
+              <div class="entry__field">
+                <input
+                  class="input"
+                  type="email"
+                  id="EMAIL"
+                  name="EMAIL"
+                  autocomplete="email"
+                  placeholder="you@example.com"
+                  data-required="true"
+                  required
+                />
+              </div>
+            </div>
+            <label class="entry__error entry__error--primary"></label>
+          </div>
+        </div>
+
+        <div class="sib-radiobutton-group sib-form-block">
+          <div class="form__entry entry_mcq">
+            <div class="form__label-row">
+              <label class="entry__label" for="BOAT_STATUS">Boat status <span>(optional)</span></label>
+              <div class="brevo-options">
+                <label class="entry__choice">
+                  <input type="radio" name="BOAT_STATUS" class="input_replaced" value="1" />
+                  <span class="radio-button"></span>
+                  <span>Owner</span>
+                </label>
+                <label class="entry__choice">
+                  <input type="radio" name="BOAT_STATUS" class="input_replaced" value="2" />
+                  <span class="radio-button"></span>
+                  <span>Refit or survey</span>
+                </label>
+                <label class="entry__choice">
+                  <input type="radio" name="BOAT_STATUS" class="input_replaced" value="3" />
+                  <span class="radio-button"></span>
+                  <span>Builder or technician</span>
+                </label>
+                <label class="entry__choice">
+                  <input type="radio" name="BOAT_STATUS" class="input_replaced" value="4" />
+                  <span class="radio-button"></span>
+                  <span>Researching</span>
+                </label>
+              </div>
+            </div>
+            <label class="entry__error entry__error--primary"></label>
+          </div>
+        </div>
+
+        <div class="sib-input sib-form-block">
+          <div class="form__entry entry_block">
+            <div class="form__label-row">
+              <label class="entry__label" for="NOTES">
+                What feature would you love to see? <span>(optional)</span>
+              </label>
+              <div class="entry__field">
+                <textarea
+                  class="input"
+                  id="NOTES"
+                  name="NOTES"
+                  maxlength="200"
+                  rows="4"
+                  placeholder="Optional"
+                ></textarea>
+              </div>
+            </div>
+            <label class="entry__error entry__error--primary"></label>
+          </div>
+        </div>
+
+        <div class="sib-captcha sib-form-block">
+          <div class="form__entry entry_block">
+            <div class="form__label-row">
+              <script is:inline>
+                window.handleCaptchaResponse = function handleCaptchaResponse() {
+                  var event = new Event("captchaChange");
+                  document.getElementById("sib-captcha").dispatchEvent(event);
+                  window.grecaptcha = window.turnstile;
+                };
+              </script>
+              <div
+                class="cf-turnstile g-recaptcha"
+                data-sitekey="0x4AAAAAADRyp50AYVKzplhJ"
+                id="sib-captcha"
+                data-callback="handleCaptchaResponse"
+                data-language="en"
+              >
+              </div>
+            </div>
+            <label class="entry__error entry__error--primary"></label>
+          </div>
+        </div>
+
+        <div class="sib-form-block">
+          <button class="sib-form-block__button sib-form-block__button-with-loader brevo-submit" form="sib-form" type="submit">
+            <svg class="icon clickable__icon progress-indicator__icon sib-hide-loader-icon" viewBox="0 0 512 512" aria-hidden="true">
+              <path d="M460.116 373.846l-20.823-12.022c-5.541-3.199-7.54-10.159-4.663-15.874 30.137-59.886 28.343-131.652-5.386-189.946-33.641-58.394-94.896-95.833-161.827-99.676C261.028 55.961 256 50.751 256 44.352V20.309c0-6.904 5.808-12.337 12.703-11.982 83.556 4.306 160.163 50.864 202.11 123.677 42.063 72.696 44.079 162.316 6.031 236.832-3.14 6.148-10.75 8.461-16.728 5.01z"></path>
+            </svg>
+            Join waitlist
+          </button>
+        </div>
+
+        <p class="brevo-provider-note">Submits through Brevo.</p>
+
+        <input type="text" name="email_address_check" value="" class="input--hidden" />
+        <input type="hidden" name="locale" value="en" />
+      </form>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  window.REQUIRED_CODE_ERROR_MESSAGE = "Please choose a country code";
+  window.LOCALE = "en";
+  window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE =
+    "The information provided is invalid. Please review the field format and try again.";
+  window.REQUIRED_ERROR_MESSAGE = "This field cannot be left blank. ";
+  window.GENERIC_INVALID_MESSAGE =
+    "The information provided is invalid. Please review the field format and try again.";
+  window.INVALID_NUMBER = "The information provided is invalid. Please review the field format and try again.";
+  window.INVALID_DATE = "Please enter a valid date";
+  window.REQUIRED_MULTISELECT_MESSAGE = "Please select at least 1 option";
+  window.translation = {
+    common: {
+      selectedList: "{quantity} list selected",
+      selectedLists: "{quantity} lists selected",
+      selectedOption: "{quantity} selected",
+      selectedOptions: "{quantity} selected",
+    },
+  };
+  window.AUTOHIDE = Boolean(0);
+</script>
+
+<script is:inline defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <style>
-  .brevo-waitlist-frame {
-    display: block;
-    width: 100%;
-    height: 940px;
-    min-height: 940px;
-    border: 0;
+  :where(.sib-form-message-panel) {
+    display: none;
+  }
+
+  .brevo-embed {
     background: #eff2f7;
+    border: 1px solid rgba(12, 13, 14, 0.1);
+    border-radius: 8px;
+    padding: 1.25rem;
+  }
+
+  .brevo-card {
+    background: #fff;
+    border: 1px solid rgba(12, 13, 14, 0.12);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+
+  .sib-form-block + .sib-form-block {
+    margin-top: 1.1rem;
+  }
+
+  .entry__label {
+    color: #0c0d0e;
+    display: block;
+    font-size: 0.96rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 0.45rem;
+  }
+
+  .entry__label span {
+    color: rgba(12, 13, 14, 0.55);
+    font-weight: 500;
+  }
+
+  .entry__field {
+    width: 100%;
+  }
+
+  .input {
+    background: #fff;
+    border: 1px solid rgba(12, 13, 14, 0.2);
+    border-radius: 6px;
+    color: #0c0d0e;
+    display: block;
+    font: inherit;
+    min-height: 3rem;
+    padding: 0.72rem 0.82rem;
+    width: 100%;
+  }
+
+  textarea.input {
+    resize: vertical;
+  }
+
+  .input::placeholder {
+    color: rgba(12, 13, 14, 0.38);
+  }
+
+  .input:focus {
+    border-color: #c7641a;
+    box-shadow: 0 0 0 3px rgba(199, 100, 26, 0.16);
+    outline: 0;
+  }
+
+  .brevo-options {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .entry__choice {
+    align-items: center;
+    color: rgba(12, 13, 14, 0.76);
+    display: flex;
+    gap: 0.55rem;
+    line-height: 1.4;
+  }
+
+  .entry__choice input {
+    margin: 0;
+  }
+
+  .sib-captcha {
+    min-height: 74px;
+  }
+
+  .brevo-submit {
+    align-items: center;
+    background: #111;
+    border: 0;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    font-weight: 700;
+    gap: 0.45rem;
+    min-height: 3rem;
+    padding: 0.78rem 1.1rem;
+  }
+
+  .brevo-submit:hover {
+    background: #262626;
+  }
+
+  .brevo-submit .icon {
+    height: 1rem;
+    width: 1rem;
+  }
+
+  .sib-hide-loader-icon {
+    display: none;
+  }
+
+  .brevo-provider-note {
+    color: rgba(12, 13, 14, 0.62);
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+
+  .input--hidden {
+    display: none;
+  }
+
+  .brevo-message {
+    border: 1px solid;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    padding: 0.9rem 1rem;
+    text-align: left;
+  }
+
+  .brevo-message-error {
+    background: #ffeded;
+    border-color: #ff4949;
+    color: #661d1d;
+  }
+
+  .brevo-message-success {
+    background: #e7faf0;
+    border-color: #13ce66;
+    color: #085229;
+  }
+
+  .entry__error {
+    border-radius: 4px;
+    color: #661d1d;
+    display: block;
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
   }
 
   @media (max-width: 640px) {
-    .brevo-waitlist-frame {
-      height: 1040px;
-      min-height: 1040px;
+    .brevo-embed {
+      margin-inline: -0.25rem;
+      padding: 1rem;
+    }
+
+    .brevo-card {
+      padding: 1rem;
     }
   }
 </style>
