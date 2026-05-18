@@ -261,14 +261,16 @@
                   window.handleCaptchaResponse = function () {
                     var event = new Event("captchaChange");
                     document.getElementById("sib-captcha").dispatchEvent(event);
+
+                    window.grecaptcha = window.turnstile;
                   };
                 </script>
                 <div
-                  class="g-recaptcha sib-visible-recaptcha"
+                  class="cf-turnstile g-recaptcha"
                   id="sib-captcha"
                   data-sitekey="0x4AAAAAADRyp50AYVKzplhJ"
                   data-callback="handleCaptchaResponse"
-                  style="direction:ltr"
+                  data-language="en"
                 >
                 </div>
               </div>
@@ -327,4 +329,4 @@
 </script>
 
 <script is:inline defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
-<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?compat=recaptcha" async defer></script>
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
