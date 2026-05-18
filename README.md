@@ -17,7 +17,7 @@ pnpm build
 
 ## Waitlist Form
 
-The form in `src/components/WaitlistForm.astro` uses Brevo's generated embedded signup form. This site has no backend, no database, and does not store email addresses locally.
+The form in `src/components/WaitlistForm.astro` embeds Brevo's hosted signup form in an iframe. This site has no backend, no database, and does not store email addresses locally.
 
 ## GitHub Pages
 
