@@ -63,6 +63,22 @@ const brevoAction =
     ></textarea>
   </label>
 
+  <div class="mt-5">
+    <script is:inline>
+      window.handleCaptchaResponse = function () {
+        var captcha = document.getElementById("sib-captcha");
+        if (captcha) captcha.dispatchEvent(new Event("captchaChange"));
+      };
+    </script>
+    <div
+      class="cf-turnstile sib-visible-recaptcha"
+      id="sib-captcha"
+      data-sitekey="0x4AAAAAADRyp50AYVKzplhJ"
+      data-callback="handleCaptchaResponse"
+    >
+    </div>
+  </div>
+
   <div aria-hidden="true" class="hidden">
     <label>
       Leave this field empty
@@ -107,3 +123,4 @@ const brevoAction =
 </script>
 
 <script is:inline defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
+<script is:inline defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
