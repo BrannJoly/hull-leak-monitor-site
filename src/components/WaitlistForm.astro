@@ -114,6 +114,7 @@
         method="POST"
         action="https://c7c6378c.sibforms.com/serve/MUIFACD-HlS2DfxGUEmfj3H4-iximMSTcykMwYyo86bE5vukwm79ZorM-gSH93nQPr-7AOOYo-sQFeaGmZk6T1VvgiZMbti4Airg_-YV1zl38CVeCKw8SnRXKm-sCJSFJ19h7TQD03Biuludua3OFrDUXD285f-aauAbV-2IkudSavW4N43XZPM5xBbEEDRLgjh8ZjY4pDiWESl8bg=="
         data-type="subscription"
+        target="brevo-hidden-frame"
       >
         <div style="padding: 8px 0;">
           <div
@@ -317,6 +318,13 @@
         <input type="hidden" name="locale" value="en" />
       </form>
     </div>
+    <iframe
+      class="sr-only"
+      name="brevo-hidden-frame"
+      title="Brevo form submission"
+      tabindex="-1"
+      aria-hidden="true"
+    ></iframe>
     <div
       id="waitlist-success"
       hidden
@@ -398,70 +406,52 @@
       }
     }
 
-    function initBrevoAjaxSubmit() {
+    function initBrevoFrameSubmit() {
       var form = document.getElementById("sib-form");
-      if (!form || form.dataset.hullLeakAjaxSubmit === "true") return;
-      form.dataset.hullLeakAjaxSubmit = "true";
+      var frame = document.querySelector('iframe[name="brevo-hidden-frame"]');
+      var pendingSubmit = false;
+      if (!form || form.dataset.hullLeakFrameSubmit === "true") return;
+      form.dataset.hullLeakFrameSubmit = "true";
 
       form.addEventListener("submit", function (event) {
-        event.preventDefault();
         clearPanels();
 
         var email = form.querySelector("#EMAIL");
         var button = form.querySelector('button[type="submit"]');
 
         if (!email || !email.value.trim()) {
+          event.preventDefault();
           setPanel("error-message", "Please enter your email address.");
           return;
         }
 
         if (!getCaptchaToken(form)) {
+          event.preventDefault();
           setPanel("error-message", "Please complete the CAPTCHA.");
           return;
         }
 
         setButtonLoading(button, true);
-
-        var request = new XMLHttpRequest();
-        var separator = form.action.indexOf("?") === -1 ? "?" : "&";
-        request.open("POST", form.action + separator + "isAjax=1");
-
-        request.onload = function () {
-          var response = {};
-          setButtonLoading(button, false);
-
-          try {
-            response = JSON.parse(request.responseText || "{}");
-          } catch (error) {
-            response = {};
-          }
-
-          if (request.status >= 200 && request.status < 300 && response.success !== false) {
-            form.reset();
-            resetCaptcha();
-            clearPanels();
-            showSuccessState();
-            return;
-          }
-
-          setPanel("error-message", response.message || "Your subscription could not be saved. Please try again.");
-          resetCaptcha();
-        };
-
-        request.onerror = function () {
-          setButtonLoading(button, false);
-          setPanel("error-message", "Your subscription could not be saved. Please try again.");
-          resetCaptcha();
-        };
-
-        request.send(new FormData(form));
+        pendingSubmit = true;
       });
+
+      if (frame) {
+        frame.addEventListener("load", function () {
+          if (!pendingSubmit) return;
+          pendingSubmit = false;
+          setButtonLoading(form.querySelector('button[type="submit"]'), false);
+          form.reset();
+          resetCaptcha();
+          clearPanels();
+          showSuccessState();
+        });
+      }
     }
 
     if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initBrevoAjaxSubmit);
+      document.addEventListener("DOMContentLoaded", initBrevoFrameSubmit);
     } else {
-      initBrevoAjaxSubmit();
+      initBrevoFrameSubmit();
     }
   })();
 </script>
