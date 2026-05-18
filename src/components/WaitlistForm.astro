@@ -114,7 +114,6 @@
         method="POST"
         action="https://c7c6378c.sibforms.com/serve/MUIFACD-HlS2DfxGUEmfj3H4-iximMSTcykMwYyo86bE5vukwm79ZorM-gSH93nQPr-7AOOYo-sQFeaGmZk6T1VvgiZMbti4Airg_-YV1zl38CVeCKw8SnRXKm-sCJSFJ19h7TQD03Biuludua3OFrDUXD285f-aauAbV-2IkudSavW4N43XZPM5xBbEEDRLgjh8ZjY4pDiWESl8bg=="
         data-type="subscription"
-        target="brevo-hidden-frame"
       >
         <div style="padding: 8px 0;">
           <div
@@ -188,11 +187,11 @@
                   style="font-weight:700; text-align:left; font-family:Helvetica, sans-serif; font-size:16px; color:#3c4858;"
                   for="NOTES"
                 >
-                  Enter your NOTES
+                  Feature you would love to see (optional)
                 </label>
 
                 <div class="entry__field">
-                  <input class="input" maxlength="200" type="text" id="NOTES" name="NOTES" autocomplete="off" placeholder="NOTES" />
+                  <input class="input" maxlength="200" type="text" id="NOTES" name="NOTES" autocomplete="off" placeholder="Tell us what would make this useful" />
                 </div>
               </div>
 
@@ -213,7 +212,7 @@
                   style="font-weight:700; text-align:left; font-family:Helvetica, sans-serif; font-size:16px; color:#3c4858;"
                   for="BOAT_STATUS"
                 >
-                  Customize this label
+                  Boat status (optional)
                 </label>
 
                 <div>
@@ -259,34 +258,16 @@
             <div class="form__entry entry_block">
               <div class="form__label-row">
                 <script is:inline>
-                  window.handleCaptchaResponse = function (token) {
-                    window.__brevoTurnstileToken = token || "";
-                    var form = document.getElementById("sib-form");
-                    if (form) {
-                      ["cf-turnstile-response", "g-recaptcha-response"].forEach(function (name) {
-                        var input = form.querySelector('input[name="' + name + '"]');
-                        if (!input) {
-                          input = document.createElement("input");
-                          input.type = "hidden";
-                          input.name = name;
-                          form.appendChild(input);
-                        }
-                        input.value = window.__brevoTurnstileToken;
-                      });
-                    }
+                  window.handleCaptchaResponse = function () {
                     var event = new Event("captchaChange");
                     document.getElementById("sib-captcha").dispatchEvent(event);
                   };
-                  window.handleCaptchaExpired = function () {
-                    window.__brevoTurnstileToken = "";
-                  };
                 </script>
                 <div
-                  class="cf-turnstile sib-visible-recaptcha"
+                  class="g-recaptcha sib-visible-recaptcha"
                   id="sib-captcha"
                   data-sitekey="0x4AAAAAADRyp50AYVKzplhJ"
                   data-callback="handleCaptchaResponse"
-                  data-expired-callback="handleCaptchaExpired"
                   style="direction:ltr"
                 >
                 </div>
@@ -324,14 +305,6 @@
   </div>
 </div>
 
-<iframe
-  class="sr-only"
-  name="brevo-hidden-frame"
-  title="Brevo form submission"
-  tabindex="-1"
-  aria-hidden="true"
-></iframe>
-
 <script is:inline>
   window.REQUIRED_CODE_ERROR_MESSAGE = "Please choose a country code";
   window.LOCALE = "en";
@@ -353,84 +326,5 @@
   window.AUTOHIDE = Boolean(0);
 </script>
 
-<script is:inline>
-  (function () {
-    var pendingSubmit = false;
-
-    function setPanel(panel, message) {
-      if (!panel) return;
-      var text = panel.querySelector(".sib-form-message-panel__inner-text");
-      if (message && text) text.innerText = message;
-      panel.classList.add("sib-form-message-panel--active");
-      panel.style.display = "block";
-    }
-
-    function clearPanels() {
-      ["success-message", "error-message"].forEach(function (id) {
-        var panel = document.getElementById(id);
-        if (panel) {
-          panel.classList.remove("sib-form-message-panel--active");
-          panel.style.display = "none";
-        }
-      });
-    }
-
-    function initBrevoSubmit() {
-      var form = document.getElementById("sib-form");
-      var frame = document.querySelector('iframe[name="brevo-hidden-frame"]');
-      if (!form || form.dataset.hullLeakFrameSubmit === "true") return;
-      form.dataset.hullLeakFrameSubmit = "true";
-
-      form.addEventListener("submit", function (event) {
-        clearPanels();
-
-        var email = form.querySelector("#EMAIL");
-        var errorPanel = document.getElementById("error-message");
-        var button = form.querySelector('button[type="submit"]');
-
-        if (!email || !email.value.trim()) {
-          event.preventDefault();
-          setPanel(errorPanel, "Please enter your email address.");
-          return;
-        }
-
-        if (!window.__brevoTurnstileToken) {
-          event.preventDefault();
-          setPanel(errorPanel, "Please complete the captcha.");
-          return;
-        }
-
-        if (button) {
-          button.disabled = true;
-          button.classList.add("sib-form-block__button-disabled");
-        }
-
-        pendingSubmit = true;
-      });
-
-      if (frame) {
-        frame.addEventListener("load", function () {
-          if (!pendingSubmit) return;
-          pendingSubmit = false;
-          var button = form.querySelector('button[type="submit"]');
-          var successPanel = document.getElementById("success-message");
-          if (button) {
-            button.disabled = false;
-            button.classList.remove("sib-form-block__button-disabled");
-          }
-          setPanel(successPanel, "Your subscription has been submitted.");
-          form.reset();
-          window.__brevoTurnstileToken = "";
-          if (window.turnstile) window.turnstile.reset("#sib-captcha");
-        });
-      }
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initBrevoSubmit);
-    } else {
-      initBrevoSubmit();
-    }
-  })();
-</script>
-<script is:inline defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
+<script is:inline defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?compat=recaptcha" async defer></script>
