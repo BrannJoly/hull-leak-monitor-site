@@ -317,14 +317,6 @@
         <input type="hidden" name="locale" value="en" />
       </form>
     </div>
-    <div
-      id="waitlist-success"
-      hidden
-      style="max-width:540px; text-align:left; background-color:rgba(255,255,255,1); border-width:1px; border-style:solid; border-color:#C0CCD9; border-radius:3px; direction:ltr; padding:32px;"
-    >
-      <p style="font-family:Helvetica, sans-serif; font-size:28px; font-weight:700; color:#3C4858; margin:0;">Success.</p>
-      <p style="font-family:Helvetica, sans-serif; font-size:16px; color:#3C4858; margin:12px 0 0;">You are on the waitlist.</p>
-    </div>
   </div>
 </div>
 
@@ -349,43 +341,5 @@
   window.AUTOHIDE = Boolean(0);
 </script>
 
-<script is:inline>
-  (function () {
-    function showSuccessState() {
-      var container = document.getElementById("sib-container");
-      var success = document.getElementById("waitlist-success");
-      if (container) container.hidden = true;
-      if (success) {
-        success.hidden = false;
-        success.setAttribute("tabindex", "-1");
-        success.focus();
-      }
-    }
-
-    function initBrevoSuccessSwap() {
-      var successPanel = document.getElementById("success-message");
-      if (!successPanel || successPanel.dataset.hullLeakSuccessSwap === "true") return;
-      successPanel.dataset.hullLeakSuccessSwap = "true";
-
-      function maybeSwap() {
-        if (window.getComputedStyle(successPanel).display === "none") return;
-        successPanel.style.display = "none";
-        showSuccessState();
-      }
-
-      new MutationObserver(maybeSwap).observe(successPanel, {
-        attributes: true,
-        attributeFilter: ["class", "style"],
-      });
-      maybeSwap();
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initBrevoSuccessSwap);
-    } else {
-      initBrevoSuccessSwap();
-    }
-  })();
-</script>
 <script is:inline defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
 <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
