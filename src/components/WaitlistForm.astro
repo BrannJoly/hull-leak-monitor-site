@@ -114,6 +114,7 @@
         method="POST"
         action="https://c7c6378c.sibforms.com/serve/MUIFACD-HlS2DfxGUEmfj3H4-iximMSTcykMwYyo86bE5vukwm79ZorM-gSH93nQPr-7AOOYo-sQFeaGmZk6T1VvgiZMbti4Airg_-YV1zl38CVeCKw8SnRXKm-sCJSFJ19h7TQD03Biuludua3OFrDUXD285f-aauAbV-2IkudSavW4N43XZPM5xBbEEDRLgjh8ZjY4pDiWESl8bg=="
         data-type="subscription"
+        target="brevo-hidden-frame"
       >
         <div style="padding: 8px 0;">
           <div
@@ -323,6 +324,14 @@
   </div>
 </div>
 
+<iframe
+  class="sr-only"
+  name="brevo-hidden-frame"
+  title="Brevo form submission"
+  tabindex="-1"
+  aria-hidden="true"
+></iframe>
+
 <script is:inline>
   window.REQUIRED_CODE_ERROR_MESSAGE = "Please choose a country code";
   window.LOCALE = "en";
@@ -346,6 +355,8 @@
 
 <script is:inline>
   (function () {
+    var pendingSubmit = false;
+
     function setPanel(panel, message) {
       if (!panel) return;
       var text = panel.querySelector(".sib-form-message-panel__inner-text");
@@ -364,36 +375,27 @@
       });
     }
 
-    function getErrorMessage(response) {
-      if (response && response.message) return response.message;
-      if (response && response.errors) {
-        var firstError = Object.keys(response.errors)[0];
-        if (firstError) return response.errors[firstError];
-      }
-      return "Your subscription could not be saved. Please try again.";
-    }
-
     function initBrevoSubmit() {
       var form = document.getElementById("sib-form");
-      if (!form || form.dataset.hullLeakAjax === "true") return;
-      form.dataset.hullLeakAjax = "true";
-      form.setAttribute("novalidate", "true");
+      var frame = document.querySelector('iframe[name="brevo-hidden-frame"]');
+      if (!form || form.dataset.hullLeakFrameSubmit === "true") return;
+      form.dataset.hullLeakFrameSubmit = "true";
 
       form.addEventListener("submit", function (event) {
-        event.preventDefault();
         clearPanels();
 
         var email = form.querySelector("#EMAIL");
         var errorPanel = document.getElementById("error-message");
-        var successPanel = document.getElementById("success-message");
         var button = form.querySelector('button[type="submit"]');
 
         if (!email || !email.value.trim()) {
+          event.preventDefault();
           setPanel(errorPanel, "Please enter your email address.");
           return;
         }
 
         if (!window.__brevoTurnstileToken) {
+          event.preventDefault();
           setPanel(errorPanel, "Please complete the captcha.");
           return;
         }
@@ -403,43 +405,25 @@
           button.classList.add("sib-form-block__button-disabled");
         }
 
-        var request = new XMLHttpRequest();
-        var formData = new FormData(form);
-        request.open("POST", form.getAttribute("action") + "?isAjax=1");
-        request.addEventListener("load", function () {
-          var response = {};
-          try {
-            response = JSON.parse(request.responseText);
-          } catch (error) {
-            response = {};
-          }
-
-          if (button) {
-            button.disabled = false;
-            button.classList.remove("sib-form-block__button-disabled");
-          }
-
-          if (response.success) {
-            setPanel(successPanel, response.message || "Your subscription has been successful.");
-            form.reset();
-            window.__brevoTurnstileToken = "";
-            if (window.turnstile) window.turnstile.reset("#sib-captcha");
-            return;
-          }
-
-          setPanel(errorPanel, getErrorMessage(response));
-          if (window.turnstile) window.turnstile.reset("#sib-captcha");
-          window.__brevoTurnstileToken = "";
-        });
-        request.addEventListener("error", function () {
-          if (button) {
-            button.disabled = false;
-            button.classList.remove("sib-form-block__button-disabled");
-          }
-          setPanel(errorPanel, "Your subscription could not be saved. Please try again.");
-        });
-        request.send(formData);
+        pendingSubmit = true;
       });
+
+      if (frame) {
+        frame.addEventListener("load", function () {
+          if (!pendingSubmit) return;
+          pendingSubmit = false;
+          var button = form.querySelector('button[type="submit"]');
+          var successPanel = document.getElementById("success-message");
+          if (button) {
+            button.disabled = false;
+            button.classList.remove("sib-form-block__button-disabled");
+          }
+          setPanel(successPanel, "Your subscription has been submitted.");
+          form.reset();
+          window.__brevoTurnstileToken = "";
+          if (window.turnstile) window.turnstile.reset("#sib-captcha");
+        });
+      }
     }
 
     if (document.readyState === "loading") {
