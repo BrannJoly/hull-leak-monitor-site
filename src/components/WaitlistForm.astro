@@ -152,10 +152,10 @@
                 <div class="entry__field">
                   <input
                     class="input"
-                    type="text"
+                    type="email"
                     id="EMAIL"
                     name="EMAIL"
-                    autocomplete="off"
+                    autocomplete="email"
                     value=""
                     placeholder="EMAIL"
                     data-required="true"
@@ -408,8 +408,6 @@
 
     function initBrevoFrameSubmit() {
       var form = document.getElementById("sib-form");
-      var frame = document.querySelector('iframe[name="brevo-hidden-frame"]');
-      var pendingSubmit = false;
       if (!form || form.dataset.hullLeakFrameSubmit === "true") return;
       form.dataset.hullLeakFrameSubmit = "true";
 
@@ -432,20 +430,14 @@
         }
 
         setButtonLoading(button, true);
-        pendingSubmit = true;
-      });
-
-      if (frame) {
-        frame.addEventListener("load", function () {
-          if (!pendingSubmit) return;
-          pendingSubmit = false;
+        window.setTimeout(function () {
           setButtonLoading(form.querySelector('button[type="submit"]'), false);
           form.reset();
           resetCaptcha();
           clearPanels();
           showSuccessState();
-        });
-      }
+        }, 250);
+      });
     }
 
     if (document.readyState === "loading") {
