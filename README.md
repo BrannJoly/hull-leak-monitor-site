@@ -17,15 +17,7 @@ pnpm build
 
 ## Waitlist Form
 
-The form in `src/components/WaitlistForm.astro` posts to Brevo:
-
-```txt
-https://sibforms.com/serve/YOUR_BREVO_FORM_ID
-```
-
-Configure that action with the real Brevo form endpoint and set the Brevo confirmation flow to send successful submissions to `/thanks/`.
-
-This site has no backend, no database, and does not store email addresses locally.
+The form in `src/components/WaitlistForm.astro` is wired to Brevo's embedded form endpoint. This site has no backend, no database, and does not store email addresses locally.
 
 ## GitHub Pages
 
