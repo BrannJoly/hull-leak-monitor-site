@@ -1,22 +1,39 @@
 ---
-const brevoAction = "https://sibforms.com/serve/YOUR_BREVO_FORM_ID";
+const brevoAction =
+  "https://c7c6378c.sibforms.com/serve/MUIFACD-HlS2DfxGUEmfj3H4-iximMSTcykMwYyo86bE5vukwm79ZorM-gSH93nQPr-7AOOYo-sQFeaGmZk6T1VvgiZMbti4Airg_-YV1zl38CVeCKw8SnRXKm-sCJSFJ19h7TQD03Biuludua3OFrDUXD285f-aauAbV-2IkudSavW4N43XZPM5xBbEEDRLgjh8ZjY4pDiWESl8bg==";
 ---
 
+<div
+  id="error-message"
+  class="sib-form-message-panel mb-4 hidden rounded-md border border-danger/30 bg-danger/10 p-4 text-sm font-medium text-danger"
+>
+  Your subscription could not be saved. Please try again.
+</div>
+
+<div
+  id="success-message"
+  class="sib-form-message-panel mb-4 hidden rounded-md border border-signal/30 bg-signal/10 p-4 text-sm font-medium text-ink"
+>
+  Your subscription has been successful.
+</div>
+
 <form
-  id="waitlist-form"
+  id="sib-form"
   action={brevoAction}
   method="POST"
+  data-type="subscription"
   class="rounded-lg border border-ink/10 bg-white p-5 shadow-lift sm:p-7"
 >
-  <!-- Set brevoAction to the Brevo form endpoint used for signups. -->
   <label class="grid gap-2 text-sm font-semibold text-ink">
     Email
     <input
       class="min-h-12 rounded-md border border-ink/16 bg-mist px-4 text-base font-normal text-ink transition placeholder:text-ink/40 focus:border-signal focus:bg-white"
       type="email"
+      id="EMAIL"
       name="EMAIL"
       autocomplete="email"
       placeholder="you@example.com"
+      data-required="true"
       required
     />
   </label>
@@ -28,10 +45,10 @@ const brevoAction = "https://sibforms.com/serve/YOUR_BREVO_FORM_ID";
       name="BOAT_STATUS"
     >
       <option value="">Select one</option>
-      <option value="owner">Owner</option>
-      <option value="refit">Refit or survey</option>
-      <option value="builder">Builder or technician</option>
-      <option value="researching">Researching</option>
+      <option value="1">Owner</option>
+      <option value="2">Refit or survey</option>
+      <option value="3">Builder or technician</option>
+      <option value="4">Researching</option>
     </select>
   </label>
 
@@ -39,10 +56,29 @@ const brevoAction = "https://sibforms.com/serve/YOUR_BREVO_FORM_ID";
     What feature would you love to see? <span class="font-normal text-ink/52">(optional)</span>
     <textarea
       class="min-h-28 rounded-md border border-ink/16 bg-mist px-4 py-3 text-base font-normal text-ink transition placeholder:text-ink/40 focus:border-signal focus:bg-white"
+      id="NOTES"
       name="NOTES"
+      maxlength="200"
       placeholder="Optional"
     ></textarea>
   </label>
+
+  <div class="mt-5">
+    <script is:inline>
+      window.handleCaptchaResponse = function () {
+        var event = new Event("captchaChange");
+        document.getElementById("sib-captcha").dispatchEvent(event);
+      };
+    </script>
+    <div
+      class="g-recaptcha sib-visible-recaptcha"
+      id="sib-captcha"
+      data-sitekey="0x4AAAAAADRyp50AYVKzplhJ"
+      data-callback="handleCaptchaResponse"
+      style="direction:ltr"
+    >
+    </div>
+  </div>
 
   <div aria-hidden="true" class="hidden">
     <label>
@@ -64,3 +100,28 @@ const brevoAction = "https://sibforms.com/serve/YOUR_BREVO_FORM_ID";
     </p>
   </div>
 </form>
+
+<script is:inline>
+  window.REQUIRED_CODE_ERROR_MESSAGE = "Please choose a country code";
+  window.LOCALE = "en";
+  window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE =
+    "The information provided is invalid. Please review the field format and try again.";
+  window.REQUIRED_ERROR_MESSAGE = "This field cannot be left blank. ";
+  window.GENERIC_INVALID_MESSAGE =
+    "The information provided is invalid. Please review the field format and try again.";
+  window.INVALID_NUMBER = "The information provided is invalid. Please review the field format and try again.";
+  window.INVALID_DATE = "Please enter a valid date";
+  window.REQUIRED_MULTISELECT_MESSAGE = "Please select at least 1 option";
+  window.translation = {
+    common: {
+      selectedList: "{quantity} list selected",
+      selectedLists: "{quantity} lists selected",
+      selectedOption: "{quantity} selected",
+      selectedOptions: "{quantity} selected",
+    },
+  };
+  window.AUTOHIDE = Boolean(0);
+</script>
+
+<script is:inline defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
+<script is:inline src="https://www.google.com/recaptcha/api.js?hl=en"></script>
