@@ -114,7 +114,6 @@
         method="POST"
         action="https://c7c6378c.sibforms.com/serve/MUIFACD-HlS2DfxGUEmfj3H4-iximMSTcykMwYyo86bE5vukwm79ZorM-gSH93nQPr-7AOOYo-sQFeaGmZk6T1VvgiZMbti4Airg_-YV1zl38CVeCKw8SnRXKm-sCJSFJ19h7TQD03Biuludua3OFrDUXD285f-aauAbV-2IkudSavW4N43XZPM5xBbEEDRLgjh8ZjY4pDiWESl8bg=="
         data-type="subscription"
-        target="brevo-hidden-frame"
       >
         <div style="padding: 8px 0;">
           <div
@@ -318,13 +317,6 @@
         <input type="hidden" name="locale" value="en" />
       </form>
     </div>
-    <iframe
-      class="sr-only"
-      name="brevo-hidden-frame"
-      title="Brevo form submission"
-      tabindex="-1"
-      aria-hidden="true"
-    ></iframe>
     <div
       id="waitlist-success"
       hidden
@@ -359,42 +351,6 @@
 
 <script is:inline>
   (function () {
-    function setPanel(id, message) {
-      var panel = document.getElementById(id);
-      if (!panel) return;
-      var text = panel.querySelector(".sib-form-message-panel__inner-text");
-      if (message && text) text.innerText = message;
-      panel.classList.add("sib-form-message-panel--active");
-      panel.style.display = "block";
-      panel.setAttribute("tabindex", "-1");
-      panel.focus();
-    }
-
-    function clearPanels() {
-      ["success-message", "error-message"].forEach(function (id) {
-        var panel = document.getElementById(id);
-        if (!panel) return;
-        panel.classList.remove("sib-form-message-panel--active");
-        panel.style.display = "none";
-      });
-    }
-
-    function getCaptchaToken(form) {
-      var tokenInput = form.querySelector('input[name="cf-turnstile-response"], input[name="g-recaptcha-response"]');
-      return tokenInput ? tokenInput.value.trim() : window.__brevoTurnstileToken || "";
-    }
-
-    function resetCaptcha() {
-      window.__brevoTurnstileToken = "";
-      if (window.turnstile) window.turnstile.reset("#sib-captcha");
-    }
-
-    function setButtonLoading(button, isLoading) {
-      if (!button) return;
-      button.disabled = isLoading;
-      button.classList.toggle("sib-form-block__button-disabled", isLoading);
-    }
-
     function showSuccessState() {
       var container = document.getElementById("sib-container");
       var success = document.getElementById("waitlist-success");
@@ -406,45 +362,30 @@
       }
     }
 
-    function initBrevoFrameSubmit() {
-      var form = document.getElementById("sib-form");
-      if (!form || form.dataset.hullLeakFrameSubmit === "true") return;
-      form.dataset.hullLeakFrameSubmit = "true";
+    function initBrevoSuccessSwap() {
+      var successPanel = document.getElementById("success-message");
+      if (!successPanel || successPanel.dataset.hullLeakSuccessSwap === "true") return;
+      successPanel.dataset.hullLeakSuccessSwap = "true";
 
-      form.addEventListener("submit", function (event) {
-        clearPanels();
+      function maybeSwap() {
+        if (window.getComputedStyle(successPanel).display === "none") return;
+        successPanel.style.display = "none";
+        showSuccessState();
+      }
 
-        var email = form.querySelector("#EMAIL");
-        var button = form.querySelector('button[type="submit"]');
-
-        if (!email || !email.value.trim()) {
-          event.preventDefault();
-          setPanel("error-message", "Please enter your email address.");
-          return;
-        }
-
-        if (!getCaptchaToken(form)) {
-          event.preventDefault();
-          setPanel("error-message", "Please complete the CAPTCHA.");
-          return;
-        }
-
-        setButtonLoading(button, true);
-        window.setTimeout(function () {
-          setButtonLoading(form.querySelector('button[type="submit"]'), false);
-          form.reset();
-          resetCaptcha();
-          clearPanels();
-          showSuccessState();
-        }, 250);
+      new MutationObserver(maybeSwap).observe(successPanel, {
+        attributes: true,
+        attributeFilter: ["class", "style"],
       });
+      maybeSwap();
     }
 
     if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initBrevoFrameSubmit);
+      document.addEventListener("DOMContentLoaded", initBrevoSuccessSwap);
     } else {
-      initBrevoFrameSubmit();
+      initBrevoSuccessSwap();
     }
   })();
 </script>
+<script is:inline defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
 <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
