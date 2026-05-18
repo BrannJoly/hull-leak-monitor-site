@@ -258,7 +258,20 @@
             <div class="form__entry entry_block">
               <div class="form__label-row">
                 <script is:inline>
-                  window.handleCaptchaResponse = function () {
+                  window.handleCaptchaResponse = function (token) {
+                    window.__brevoTurnstileToken = token || "";
+                    var form = document.getElementById("sib-form");
+                    if (form && token) {
+                      var tokenInput = form.querySelector('input[name="cf-turnstile-response"]');
+                      if (!tokenInput) {
+                        tokenInput = document.createElement("input");
+                        tokenInput.type = "hidden";
+                        tokenInput.name = "cf-turnstile-response";
+                        form.appendChild(tokenInput);
+                      }
+                      tokenInput.value = token;
+                    }
+
                     var event = new Event("captchaChange");
                     document.getElementById("sib-captcha").dispatchEvent(event);
 
@@ -304,6 +317,14 @@
         <input type="hidden" name="locale" value="en" />
       </form>
     </div>
+    <div
+      id="waitlist-success"
+      hidden
+      style="max-width:540px; text-align:left; background-color:rgba(255,255,255,1); border-width:1px; border-style:solid; border-color:#C0CCD9; border-radius:3px; direction:ltr; padding:32px;"
+    >
+      <p style="font-family:Helvetica, sans-serif; font-size:28px; font-weight:700; color:#3C4858; margin:0;">Success.</p>
+      <p style="font-family:Helvetica, sans-serif; font-size:16px; color:#3C4858; margin:12px 0 0;">You are on the waitlist.</p>
+    </div>
   </div>
 </div>
 
@@ -328,5 +349,120 @@
   window.AUTOHIDE = Boolean(0);
 </script>
 
-<script is:inline defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
+<script is:inline>
+  (function () {
+    function setPanel(id, message) {
+      var panel = document.getElementById(id);
+      if (!panel) return;
+      var text = panel.querySelector(".sib-form-message-panel__inner-text");
+      if (message && text) text.innerText = message;
+      panel.classList.add("sib-form-message-panel--active");
+      panel.style.display = "block";
+      panel.setAttribute("tabindex", "-1");
+      panel.focus();
+    }
+
+    function clearPanels() {
+      ["success-message", "error-message"].forEach(function (id) {
+        var panel = document.getElementById(id);
+        if (!panel) return;
+        panel.classList.remove("sib-form-message-panel--active");
+        panel.style.display = "none";
+      });
+    }
+
+    function getCaptchaToken(form) {
+      var tokenInput = form.querySelector('input[name="cf-turnstile-response"], input[name="g-recaptcha-response"]');
+      return tokenInput ? tokenInput.value.trim() : window.__brevoTurnstileToken || "";
+    }
+
+    function resetCaptcha() {
+      window.__brevoTurnstileToken = "";
+      if (window.turnstile) window.turnstile.reset("#sib-captcha");
+    }
+
+    function setButtonLoading(button, isLoading) {
+      if (!button) return;
+      button.disabled = isLoading;
+      button.classList.toggle("sib-form-block__button-disabled", isLoading);
+    }
+
+    function showSuccessState() {
+      var container = document.getElementById("sib-container");
+      var success = document.getElementById("waitlist-success");
+      if (container) container.hidden = true;
+      if (success) {
+        success.hidden = false;
+        success.setAttribute("tabindex", "-1");
+        success.focus();
+      }
+    }
+
+    function initBrevoAjaxSubmit() {
+      var form = document.getElementById("sib-form");
+      if (!form || form.dataset.hullLeakAjaxSubmit === "true") return;
+      form.dataset.hullLeakAjaxSubmit = "true";
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        clearPanels();
+
+        var email = form.querySelector("#EMAIL");
+        var button = form.querySelector('button[type="submit"]');
+
+        if (!email || !email.value.trim()) {
+          setPanel("error-message", "Please enter your email address.");
+          return;
+        }
+
+        if (!getCaptchaToken(form)) {
+          setPanel("error-message", "Please complete the CAPTCHA.");
+          return;
+        }
+
+        setButtonLoading(button, true);
+
+        var request = new XMLHttpRequest();
+        var separator = form.action.indexOf("?") === -1 ? "?" : "&";
+        request.open("POST", form.action + separator + "isAjax=1");
+
+        request.onload = function () {
+          var response = {};
+          setButtonLoading(button, false);
+
+          try {
+            response = JSON.parse(request.responseText || "{}");
+          } catch (error) {
+            response = {};
+          }
+
+          if (request.status >= 200 && request.status < 300 && response.success !== false) {
+            form.reset();
+            resetCaptcha();
+            clearPanels();
+            showSuccessState();
+            return;
+          }
+
+          setPanel("error-message", response.message || "Your subscription could not be saved. Please try again.");
+          resetCaptcha();
+        };
+
+        request.onerror = function () {
+          setButtonLoading(button, false);
+          setPanel("error-message", "Your subscription could not be saved. Please try again.");
+          resetCaptcha();
+        };
+
+        request.send(new FormData(form));
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initBrevoAjaxSubmit);
+    } else {
+      initBrevoAjaxSubmit();
+    }
+  })();
+</script>
 <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
