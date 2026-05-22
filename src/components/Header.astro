@@ -1,25 +1,46 @@
 ---
+import { defaultLocale, routePaths, siteContent, type Locale, type RouteKey } from "../i18n";
+
+interface Props {
+  locale?: Locale;
+  route?: RouteKey;
+}
+
+const { locale = defaultLocale, route = "home" } = Astro.props;
+const strings = siteContent[locale];
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 const withBase = (path = "") => `${base}${path.replace(/^\//, "")}`;
+const homeHref = withBase(routePaths.home[locale]);
+const alternateLocale = locale === "fr" ? "en" : "fr";
+const languageHref = `${withBase(routePaths[route][alternateLocale])}?lang=${alternateLocale}`;
 ---
 
 <header class="relative z-20 border-b border-ink/10 bg-mist/88 backdrop-blur">
   <div class="section-shell flex min-h-16 items-center justify-between gap-5">
-    <a href={withBase()} class="flex items-center gap-3 font-semibold text-ink" aria-label="Hull Leak Monitor home">
+    <a href={homeHref} class="flex items-center gap-3 font-semibold text-ink" aria-label={strings.nav.homeAria}>
       <span class="grid h-9 w-9 place-items-center rounded-md bg-ink text-sm font-bold text-white">HL</span>
-      <span>Hull Leak Monitor</span>
+      <span>{strings.siteName}</span>
     </a>
 
-    <nav class="hidden items-center gap-7 text-sm font-medium text-ink/72 md:flex" aria-label="Primary navigation">
-      <a class="transition hover:text-ink" href={withBase("#how-it-works")}>How it works</a>
-      <a class="transition hover:text-ink" href={withBase("#specs")}>Specs</a>
+    <nav class="hidden items-center gap-7 text-sm font-medium text-ink/72 md:flex" aria-label={strings.nav.primaryAria}>
+      <a class="transition hover:text-ink" href={`${homeHref}#how-it-works`}>{strings.nav.howItWorks}</a>
+      <a class="transition hover:text-ink" href={`${homeHref}#specs`}>{strings.nav.specs}</a>
     </nav>
 
-    <a
-      href={withBase("#waitlist")}
-      class="inline-flex min-h-11 items-center justify-center rounded-md bg-ink px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-panel-black focus-visible:outline-signal"
-    >
-      Join waitlist
-    </a>
+    <div class="flex items-center gap-2">
+      <a
+        href={languageHref}
+        class="inline-flex min-h-10 items-center justify-center rounded-md border border-ink/14 bg-white/70 px-3 text-sm font-semibold text-ink shadow-sm transition hover:bg-white"
+        aria-label={strings.nav.languageAria}
+      >
+        {strings.nav.languageLabel}
+      </a>
+      <a
+        href={`${homeHref}#waitlist`}
+        class="inline-flex min-h-11 items-center justify-center rounded-md bg-ink px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-panel-black focus-visible:outline-signal"
+      >
+        {strings.nav.joinWaitlist}
+      </a>
+    </div>
   </div>
 </header>

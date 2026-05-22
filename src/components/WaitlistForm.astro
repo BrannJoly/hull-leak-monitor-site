@@ -1,4 +1,12 @@
 ---
+import { defaultLocale, siteContent, type Locale } from "../i18n";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = defaultLocale } = Astro.props;
+const strings = siteContent[locale].form;
 const brevoAction =
   "https://c7c6378c.sibforms.com/serve/MUIFACD-HlS2DfxGUEmfj3H4-iximMSTcykMwYyo86bE5vukwm79ZorM-gSH93nQPr-7AOOYo-sQFeaGmZk6T1VvgiZMbti4Airg_-YV1zl38CVeCKw8SnRXKm-sCJSFJ19h7TQD03Biuludua3OFrDUXD285f-aauAbV-2IkudSavW4N43XZPM5xBbEEDRLgjh8ZjY4pDiWESl8bg==";
 ---
@@ -8,7 +16,7 @@ const brevoAction =
     <div id="error-message" class="sib-form-message-panel brevo-message brevo-message-error" role="alert">
       <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
         <span class="sib-form-message-panel__inner-text">
-          Your subscription could not be saved. Please try again.
+          {strings.errorMessage}
         </span>
       </div>
     </div>
@@ -16,7 +24,7 @@ const brevoAction =
     <div id="success-message" class="sib-form-message-panel brevo-message brevo-message-success" role="status">
       <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
         <span class="sib-form-message-panel__inner-text">
-          Success, you are on the waitlist.
+          {strings.successMessage}
         </span>
       </div>
     </div>
@@ -27,7 +35,7 @@ const brevoAction =
           <div class="form__entry entry_block">
             <div class="form__label-row">
               <label class="entry__label" for="EMAIL" data-required="*">
-                Email address
+                {strings.emailLabel}
               </label>
               <div class="entry__field">
                 <input
@@ -36,7 +44,7 @@ const brevoAction =
                   id="EMAIL"
                   name="EMAIL"
                   autocomplete="email"
-                  placeholder="you@example.com"
+                  placeholder={strings.emailPlaceholder}
                   data-required="true"
                   required
                 />
@@ -49,28 +57,17 @@ const brevoAction =
         <div class="sib-radiobutton-group sib-form-block">
           <div class="form__entry entry_mcq">
             <div class="form__label-row">
-              <label class="entry__label" for="BOAT_STATUS">Boat status <span>(optional)</span></label>
+              <label class="entry__label" for="BOAT_STATUS">{strings.boatStatusLabel} <span>({strings.optional})</span></label>
               <div class="brevo-options">
-                <label class="entry__choice">
-                  <input type="radio" name="BOAT_STATUS" class="input_replaced" value="1" />
-                  <span class="radio-button"></span>
-                  <span>Owner</span>
-                </label>
-                <label class="entry__choice">
-                  <input type="radio" name="BOAT_STATUS" class="input_replaced" value="2" />
-                  <span class="radio-button"></span>
-                  <span>Refit or survey</span>
-                </label>
-                <label class="entry__choice">
-                  <input type="radio" name="BOAT_STATUS" class="input_replaced" value="3" />
-                  <span class="radio-button"></span>
-                  <span>Builder or technician</span>
-                </label>
-                <label class="entry__choice">
-                  <input type="radio" name="BOAT_STATUS" class="input_replaced" value="4" />
-                  <span class="radio-button"></span>
-                  <span>Researching</span>
-                </label>
+                {
+                  strings.boatStatusOptions.map((option, index) => (
+                    <label class="entry__choice">
+                      <input type="radio" name="BOAT_STATUS" class="input_replaced" value={String(index + 1)} />
+                      <span class="radio-button"></span>
+                      <span>{option}</span>
+                    </label>
+                  ))
+                }
               </div>
             </div>
             <label class="entry__error entry__error--primary"></label>
@@ -81,7 +78,7 @@ const brevoAction =
           <div class="form__entry entry_block">
             <div class="form__label-row">
               <label class="entry__label" for="NOTES">
-                What feature would you love to see? <span>(optional)</span>
+                {strings.featureLabel} <span>({strings.optional})</span>
               </label>
               <div class="entry__field">
                 <textarea
@@ -90,7 +87,7 @@ const brevoAction =
                   name="NOTES"
                   maxlength="200"
                   rows="4"
-                  placeholder="Optional"
+                  placeholder={strings.notesPlaceholder}
                 ></textarea>
               </div>
             </div>
@@ -113,7 +110,7 @@ const brevoAction =
                 data-sitekey="0x4AAAAAADRyp50AYVKzplhJ"
                 id="sib-captcha"
                 data-callback="handleCaptchaResponse"
-                data-language="en"
+                data-language={locale}
               >
               </div>
             </div>
@@ -126,36 +123,49 @@ const brevoAction =
             <svg class="icon clickable__icon progress-indicator__icon sib-hide-loader-icon" viewBox="0 0 512 512" aria-hidden="true">
               <path d="M460.116 373.846l-20.823-12.022c-5.541-3.199-7.54-10.159-4.663-15.874 30.137-59.886 28.343-131.652-5.386-189.946-33.641-58.394-94.896-95.833-161.827-99.676C261.028 55.961 256 50.751 256 44.352V20.309c0-6.904 5.808-12.337 12.703-11.982 83.556 4.306 160.163 50.864 202.11 123.677 42.063 72.696 44.079 162.316 6.031 236.832-3.14 6.148-10.75 8.461-16.728 5.01z"></path>
             </svg>
-            Join waitlist
+            {strings.submit}
           </button>
         </div>
 
-        <p class="brevo-provider-note">Submits through Brevo.</p>
+        <p class="brevo-provider-note">{strings.providerNote}</p>
 
         <input type="text" name="email_address_check" value="" class="input--hidden" />
-        <input type="hidden" name="locale" value="en" />
+        <input type="hidden" name="locale" value={locale} />
       </form>
     </div>
   </div>
 </div>
 
-<script is:inline>
-  window.REQUIRED_CODE_ERROR_MESSAGE = "Please choose a country code";
-  window.LOCALE = "en";
-  window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE =
-    "The information provided is invalid. Please review the field format and try again.";
-  window.REQUIRED_ERROR_MESSAGE = "This field cannot be left blank. ";
-  window.GENERIC_INVALID_MESSAGE =
-    "The information provided is invalid. Please review the field format and try again.";
-  window.INVALID_NUMBER = "The information provided is invalid. Please review the field format and try again.";
-  window.INVALID_DATE = "Please enter a valid date";
-  window.REQUIRED_MULTISELECT_MESSAGE = "Please select at least 1 option";
+<script
+  is:inline
+  data-locale={locale}
+  data-required-code={strings.clientMessages.requiredCode}
+  data-invalid={strings.clientMessages.invalid}
+  data-required={strings.clientMessages.required}
+  data-invalid-date={strings.clientMessages.invalidDate}
+  data-required-multiselect={strings.clientMessages.requiredMultiselect}
+  data-selected-list={strings.clientMessages.selectedList}
+  data-selected-lists={strings.clientMessages.selectedLists}
+  data-selected-option={strings.clientMessages.selectedOption}
+  data-selected-options={strings.clientMessages.selectedOptions}
+>
+  const brevoLocaleScript = document.currentScript;
+  const brevoMessages = brevoLocaleScript ? brevoLocaleScript.dataset : {};
+
+  window.REQUIRED_CODE_ERROR_MESSAGE = brevoMessages.requiredCode || "";
+  window.LOCALE = brevoMessages.locale || "en";
+  window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = brevoMessages.invalid || "";
+  window.REQUIRED_ERROR_MESSAGE = brevoMessages.required || "";
+  window.GENERIC_INVALID_MESSAGE = brevoMessages.invalid || "";
+  window.INVALID_NUMBER = brevoMessages.invalid || "";
+  window.INVALID_DATE = brevoMessages.invalidDate || "";
+  window.REQUIRED_MULTISELECT_MESSAGE = brevoMessages.requiredMultiselect || "";
   window.translation = {
     common: {
-      selectedList: "{quantity} list selected",
-      selectedLists: "{quantity} lists selected",
-      selectedOption: "{quantity} selected",
-      selectedOptions: "{quantity} selected",
+      selectedList: brevoMessages.selectedList || "",
+      selectedLists: brevoMessages.selectedLists || "",
+      selectedOption: brevoMessages.selectedOption || "",
+      selectedOptions: brevoMessages.selectedOptions || "",
     },
   };
   window.AUTOHIDE = Boolean(0);

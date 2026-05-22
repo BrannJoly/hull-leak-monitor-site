@@ -1,0 +1,158 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Footer from "./Footer.astro";
+import Header from "./Header.astro";
+import WaitlistForm from "./WaitlistForm.astro";
+import { defaultLocale, siteContent, type Locale } from "../i18n";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = defaultLocale } = Astro.props;
+const strings = siteContent[locale];
+const page = strings.home;
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const frontHeroImage = `${base}images/hull-leak-monitor-illustration.jpeg`;
+const backHeroImage = `${base}images/hull-leak-monitor-back.jpeg`;
+const specSeparator = locale === "fr" ? " :" : ":";
+---
+
+<BaseLayout
+  locale={locale}
+  route="home"
+  title={page.meta.title}
+  description={page.meta.description}
+>
+  <Header locale={locale} route="home" />
+
+  <main>
+    <section class="overflow-hidden bg-[#eef2ed]">
+      <div class="section-shell grid gap-9 py-10 sm:py-12 lg:grid-cols-[0.78fr_1.22fr] lg:items-center lg:gap-10 lg:py-14">
+        <div class="max-w-xl">
+          <p class="eyebrow">{page.hero.eyebrow}</p>
+          <h1 class="mt-2 text-5xl font-semibold leading-[0.95] text-ink sm:text-6xl">
+            {page.hero.title}
+          </h1>
+          <p class="mt-6 text-lg leading-8 text-ink/72 sm:text-xl sm:leading-9">
+            {page.hero.body}
+          </p>
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a
+              class="inline-flex min-h-12 items-center justify-center rounded-md bg-ink px-5 text-base font-semibold text-white shadow-sm transition hover:bg-panel-black"
+              href="#waitlist"
+            >
+              {page.hero.primaryCta}
+            </a>
+            <a
+              class="inline-flex min-h-12 items-center justify-center rounded-md border border-ink/18 bg-white/80 px-5 text-base font-semibold text-ink shadow-sm transition hover:bg-white"
+              href="#how-it-works"
+            >
+              {page.hero.secondaryCta}
+            </a>
+          </div>
+        </div>
+
+        <figure class="lg:justify-self-end">
+          <img
+            class="block w-full max-w-3xl"
+            src={frontHeroImage}
+            alt={page.hero.frontAlt}
+            loading="eager"
+          />
+        </figure>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="bg-white py-16 sm:py-20">
+      <div class="section-shell">
+        <div class="max-w-3xl">
+          <p class="eyebrow">{page.how.eyebrow}</p>
+          <h2 class="mt-4 text-3xl font-semibold leading-tight text-ink sm:text-4xl">
+            {page.how.title}
+          </h2>
+          <p class="mt-5 leading-8 text-ink/68">
+            {page.how.body}
+          </p>
+        </div>
+
+        <div class="mt-10 grid gap-4 lg:grid-cols-3">
+          {
+            page.how.features.map((feature) => (
+              <article class="rounded-lg border border-ink/10 bg-mist p-6">
+                <p class="text-sm font-semibold text-copper">{feature.kicker}</p>
+                <h3 class="mt-3 text-xl font-semibold text-ink">{feature.title}</h3>
+                <div class="mt-3 space-y-3 leading-7 text-ink/68">
+                  {feature.body.map((paragraph) => (
+                    <p>{paragraph}</p>
+                  ))}
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="specs" class="bg-mist py-16 sm:py-20">
+      <div class="section-shell">
+        <div class="max-w-3xl">
+          <p class="eyebrow">{page.specs.eyebrow}</p>
+          <h2 class="mt-4 text-3xl font-semibold leading-tight text-ink sm:text-4xl">
+            {page.specs.title}
+          </h2>
+        </div>
+
+        <div class="mt-10 grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-start">
+          <ul class="grid gap-3 sm:grid-cols-2">
+            {
+              page.specs.items.map((item) => (
+                <li class="rounded-lg border border-ink/10 bg-white p-4 leading-7 text-ink/72 shadow-lift">
+                  <span class="font-semibold text-ink">{item.label}{specSeparator}</span> {item.text}
+                </li>
+              ))
+            }
+          </ul>
+
+          <figure class="mx-auto w-full max-w-xl lg:max-w-none">
+            <img
+              class="block w-full"
+              src={backHeroImage}
+              alt={page.specs.backAlt}
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="waitlist" class="bg-white py-16 sm:py-20">
+      <div class="section-shell grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <div>
+          <p class="eyebrow">{page.waitlist.eyebrow}</p>
+          <h2 class="mt-4 text-3xl font-semibold leading-tight text-ink sm:text-4xl">
+            {page.waitlist.title}
+          </h2>
+          <p class="mt-5 leading-8 text-ink/68">
+            {page.waitlist.body}
+          </p>
+        </div>
+
+        <WaitlistForm locale={locale} />
+      </div>
+    </section>
+
+    <section class="bg-panel-black py-16 text-white sm:py-20">
+      <div class="section-shell">
+        <div class="rounded-lg border border-white/12 bg-white/[0.04] p-5 sm:p-6">
+          <p class="text-sm font-semibold uppercase tracking-[0.18em] text-warning">{page.note.eyebrow}</p>
+          <p class="mt-3 leading-7 text-white/68">
+            {page.note.body}
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer locale={locale} />
+</BaseLayout>

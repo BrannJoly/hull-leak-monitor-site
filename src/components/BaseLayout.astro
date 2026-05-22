@@ -1,28 +1,106 @@
 ---
 import "../styles/global.css";
+import { defaultLocale, routePaths, siteContent, type Locale, type RouteKey } from "../i18n";
 
 interface Props {
   title?: string;
   description?: string;
+  locale?: Locale;
+  route?: RouteKey;
 }
 
 const {
-  title = "Hull Leak Monitor | DC leakage monitoring for metal boats",
-  description = "Join the waitlist for Hull Leak Monitor, a panel-mounted DC leakage monitor for aluminium and steel boats.",
+  locale = defaultLocale,
+  route,
 } = Astro.props;
 
+const strings = siteContent[locale];
+const title = Astro.props.title ?? strings.layout.defaultTitle;
+const description = Astro.props.description ?? strings.layout.defaultDescription;
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const withBase = (path = "") => `${base}${path.replace(/^\//, "")}`;
+const localizedPaths = route ? routePaths[route] : undefined;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    {
+      localizedPaths && (
+        <>
+          <link rel="alternate" hreflang="en" href={withBase(localizedPaths.en)} />
+          <link rel="alternate" hreflang="fr" href={withBase(localizedPaths.fr)} />
+          <link rel="alternate" hreflang="x-default" href={withBase(localizedPaths.en)} />
+        </>
+      )
+    }
     <title>{title}</title>
+    {
+      localizedPaths && (
+        <script
+          is:inline
+          data-locale={locale}
+          data-en-href={withBase(localizedPaths.en)}
+          data-fr-href={withBase(localizedPaths.fr)}
+        >
+          (() => {
+            const script = document.currentScript;
+            if (!script) return;
+
+            const currentLocale = script.dataset.locale;
+            const storageKey = "hull-leak-monitor-locale";
+            const url = new URL(window.location.href);
+            const requestedLocale = url.searchParams.get("lang");
+            const explicitLocale = requestedLocale === "en" || requestedLocale === "fr" ? requestedLocale : "";
+
+            let targetLocale = explicitLocale;
+
+            try {
+              if (explicitLocale) {
+                window.localStorage.setItem(storageKey, explicitLocale);
+              } else {
+                const storedLocale = window.localStorage.getItem(storageKey);
+                if (storedLocale === "en" || storedLocale === "fr") {
+                  targetLocale = storedLocale;
+                }
+              }
+            } catch {
+              targetLocale = explicitLocale;
+            }
+
+            if (!targetLocale) {
+              const languages =
+                Array.isArray(navigator.languages) && navigator.languages.length > 0
+                  ? navigator.languages
+                  : [navigator.language || ""];
+              targetLocale = languages.some((language) => /^fr(?:[-_]|$)/i.test(language)) ? "fr" : "en";
+            }
+
+            if (explicitLocale && targetLocale === currentLocale) {
+              url.searchParams.delete("lang");
+              window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+              return;
+            }
+
+            if (targetLocale === currentLocale) return;
+
+            const targetHref = targetLocale === "fr" ? script.dataset.frHref : script.dataset.enHref;
+            if (!targetHref) return;
+
+            url.searchParams.delete("lang");
+            const nextUrl = new URL(targetHref, window.location.origin);
+            nextUrl.search = url.searchParams.toString();
+            nextUrl.hash = url.hash;
+            window.location.replace(nextUrl.toString());
+          })();
+        </script>
+      )
+    }
   </head>
   <body>
     <slot />

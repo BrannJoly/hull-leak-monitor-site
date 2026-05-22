@@ -1,14 +1,22 @@
 ---
+import { defaultLocale, routePaths, siteContent, type Locale } from "../i18n";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = defaultLocale } = Astro.props;
+const strings = siteContent[locale];
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 const withBase = (path = "") => `${base}${path.replace(/^\//, "")}`;
 ---
 
 <footer class="border-t border-ink/10 bg-white">
   <div class="section-shell flex flex-col gap-5 py-8 text-sm text-ink/62 md:flex-row md:items-center md:justify-between">
-    <p>&copy; {new Date().getFullYear()} Hull Leak Monitor.</p>
-    <nav class="flex flex-wrap gap-5" aria-label="Footer navigation">
-      <a class="font-medium text-ink/72 transition hover:text-ink" href={withBase()}>Home</a>
-      <a class="font-medium text-ink/72 transition hover:text-ink" href={withBase("privacy/")}>Privacy</a>
+    <p>&copy; {new Date().getFullYear()} {strings.siteName}.</p>
+    <nav class="flex flex-wrap gap-5" aria-label={strings.footer.aria}>
+      <a class="font-medium text-ink/72 transition hover:text-ink" href={withBase(routePaths.home[locale])}>{strings.footer.home}</a>
+      <a class="font-medium text-ink/72 transition hover:text-ink" href={withBase(routePaths.privacy[locale])}>{strings.footer.privacy}</a>
     </nav>
   </div>
 </footer>
